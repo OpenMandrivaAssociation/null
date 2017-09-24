@@ -8,7 +8,7 @@ Release:	1.5
 Epoch:		1
 Group:		Development/Other
 License:	GPL
-
+Buildrequires: clang
 %description
 Dummy package.
 
@@ -23,6 +23,7 @@ A dummy subpackage.
 %setup -D -T -n .
 
 %build
+echo __GNUC__ | /usr/bin/clang -E -
 
 %install
 mkdir -p %{buildroot}
