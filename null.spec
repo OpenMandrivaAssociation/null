@@ -8,7 +8,6 @@ Release:	1.6
 Epoch:		1
 Group:		Development/Other
 License:	GPL
-ExclusiveArch:	%{ix86} x86_64
 
 %description
 Dummy package.
