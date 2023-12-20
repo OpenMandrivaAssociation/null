@@ -4,7 +4,7 @@
 Summary:	A dummy package for bs testing purpose
 Name:		null
 Version:	12
-Release:	1.10
+Release:	1.11
 Epoch:		1
 Group:		Development/Other
 License:	GPL
