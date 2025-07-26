@@ -9,6 +9,8 @@ Epoch:		1
 Group:		Development/Other
 License:	GPL
 
+Source0:	readme.tar.zst
+
 %description
 Dummy package.
 
@@ -20,9 +22,10 @@ Summary:	Test package
 A dummy subpackage.
 
 %prep
-%setup -D -T -n .
+%setup -T -D -a 0 -n .
 
 %build
+cat readme.txt
 
 %install
 mkdir -p %{buildroot}
@@ -32,4 +35,3 @@ echo "csh sux"
 
 %files
 %files dummy
-
