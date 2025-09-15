@@ -1,37 +1,42 @@
-%define _enable_debug_packages %{nil}
-%define debug_package %{nil}
+Summary: Dummy package
+Name:    null
+Version: 2.0
+Release: 1
+Group:   Development/Other
+License: GPL
 
-Summary:	A dummy package for bs testing purpose
-Name:		null
-Version:	12
-Release:	1.11
-Epoch:		1
-Group:		Development/Other
-License:	GPL
+Source0: readme.tar.zst
 
-Source0:	readme.tar.zst
+BuildRequires: binutils
+BuildRequires: cmake
+
+BuildSystem: cmake
 
 %description
-Dummy package.
+A dummy package for testing purposes.
 
-%package dummy
-Group:		Development/Other
-Summary:	Test package
+%package simd_test
+Group:   Development/Other
+Summary: SIMD test
 
-%description dummy
-A dummy subpackage.
+%description simd_test
+A small test program to verify SIMD instructions are emitted for the target.
 
 %prep
 %setup -T -D -a 0 -n .
-
-%build
 cat readme.txt
 
-%install
-mkdir -p %{buildroot}
+cp -a %{_sourcedir}/simd_test/* .
 
-%post -p /bin/csh
-echo "csh sux"
+%install -a
+# Run objdump on the installed binary, save and print
+mkdir -p %{buildroot}%{_datadir}/simd_test
+objdump -d %{buildroot}%{_bindir}/simd_test | tee %{buildroot}%{_datadir}/simd_test/simd_test.disasm
 
 %files
-%files dummy
+%doc readme.txt
+
+%files simd_test
+%doc README.md
+%{_bindir}/simd_test
+%{_datadir}/simd_test/simd_test.disasm
