@@ -2,3 +2,46 @@ version: 40
 imports:
 - projectPath: OpenMandriva/Packages
   revision: mirroring
+jobs:
+- name: Build package(s)
+  jobExecutor: builders-@script:omv-arch-to-onedev-arch@
+  steps:
+  - !CheckoutStep
+    name: Checkout code
+    cloneCredential: !DefaultCredential {}
+    withLfs: true
+    withSubmodules: true
+    cloneDepth: 1
+    condition: SUCCESSFUL
+    optional: false
+  - !CommandStep
+    name: Build
+    runInContainer: true
+    image: openmandriva/cooker
+    interpreter: !DefaultInterpreter
+      commands: "set -ex\nset -o pipefail\n\ndnf --refresh --assumeyes --no-docs --setopt=install_weak_deps=False upgrade\ndnf --assumeyes --setopt=install_weak_deps=False --no-docs install mock git coreutils curl sudo 'dnf-command(builddep)' 'dnf5-command(builddep)' procps-ng tar locales-en findutils util-linux wget abb rpmdevtools rpm-build sed grep xz gnupg hostname python-yaml nosync python-magic\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\nbash -s build < <(\n  sed 's/rpmbuild /rpmbuild --target=@param:arch@ /' /usr/bin/abb\n  echo 'exit $?'\n)\n"
+    useTTY: true
+    condition: SUCCESSFUL
+    optional: false
+  - !PublishArtifactStep
+    name: Publish
+    artifacts: '**/*.rpm'
+    condition: SUCCESSFUL
+    optional: false
+  paramSpecs:
+  - !ChoiceParam
+    name: arch
+    allowMultiple: false
+    allowEmpty: false
+    choiceProvider: !SpecifiedChoices
+      choices:
+      - value: aarch64
+        color: '#0d87e9'
+      - value: x86_64
+        color: '#0d87e9'
+      - value: znver1
+        color: '#0d87e9'
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 14400
