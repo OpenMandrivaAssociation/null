@@ -17,9 +17,9 @@ jobs:
   - !CommandStep
     name: Build
     runInContainer: true
-    image: openmandriva/cooker
+    image: openmandriva/@param:version@
     interpreter: !DefaultInterpreter
-      commands: "set -ex\nset -o pipefail\n\ndnf --refresh --assumeyes --no-docs --setopt=install_weak_deps=False upgrade\ndnf --assumeyes --setopt=install_weak_deps=False --no-docs install mock git coreutils curl sudo 'dnf-command(builddep)' 'dnf5-command(builddep)' procps-ng tar locales-en findutils util-linux wget abb rpmdevtools rpm-build sed grep xz gnupg hostname python-yaml nosync python-magic\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\nbash -s build < <(\n  sed 's/rpmbuild /rpmbuild --target=@param:arch@ /' /usr/bin/abb\n  echo 'exit $?'\n)\n"
+      commands: "set -e\n\ndnf --refresh --assumeyes --no-docs --setopt=install_weak_deps=False upgrade\ndnf --assumeyes --setopt=install_weak_deps=False --no-docs install mock git coreutils curl sudo 'dnf-command(builddep)' 'dnf5-command(builddep)' procps-ng tar locales-en findutils util-linux wget abb rpmdevtools rpm-build sed grep xz gnupg hostname python-yaml nosync python-magic\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\nbash -s build < <(\n  sed 's/rpmbuild /rpmbuild --target=@param:arch@ /' /usr/bin/abb\n  echo 'exit $?'\n)\n"
     useTTY: true
     condition: SUCCESSFUL
     optional: false
@@ -40,6 +40,18 @@ jobs:
       - value: x86_64
         color: '#0d87e9'
       - value: znver1
+        color: '#0d87e9'
+  - !ChoiceParam
+    name: version
+    allowMultiple: false
+    allowEmpty: false
+    choiceProvider: !SpecifiedChoices
+      choices:
+      - value: cooker
+        color: '#0d87e9'
+      - value: rolling
+        color: '#0d87e9'
+      - value: rock
         color: '#0d87e9'
   retryCondition: never
   maxRetries: 3
