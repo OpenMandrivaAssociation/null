@@ -39,7 +39,7 @@ main() {
 
 		local logname="${project}_${action}_$(/bin/date +%Y%m%d_%H%M%S).log"
 
-		rpmbuild "$action" \
+		run_in_bwrap rpmbuild "$action" \
 			--target "$arch" \
 			--define "_topdir ${PWD}" \
 			--define "_sourcedir ${PWD}" \
