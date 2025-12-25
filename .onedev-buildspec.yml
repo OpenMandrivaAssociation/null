@@ -20,7 +20,7 @@ jobs:
     image: openmandriva/minimal:@param:version@
     interpreter:
       type: DefaultInterpreter
-      commands: "set -e\n\ndnf --refresh --assumeyes upgrade\ndnf --assumeyes install bubblewrap mock git coreutils curl sudo 'dnf-command(builddep)' 'dnf5-command(builddep)' procps-ng tar locales-en findutils util-linux wget abb rpmdevtools rpm-build sed grep xz gnupg hostname python-yaml nosync python-magic\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\n./rpm_download_source.sh\n./rpm_build.sh\n"
+      commands: "set -e\n\ndnf --refresh --assumeyes upgrade\ndnf --assumeyes install bubblewrap git wget curl rpmdevtools rpm-build\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\n./rpm_download_source.sh\n./rpm_build.sh\n"
     useTTY: true
     condition: SUCCESSFUL
     optional: false
