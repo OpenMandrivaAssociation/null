@@ -20,7 +20,7 @@ jobs:
     image: openmandriva/minimal:@param:version@
     interpreter:
       type: DefaultInterpreter
-      commands: "set -e\n\nmount | grep onedev\nls -ld /onedev-build/workspace\n\ndnf --refresh --assumeyes upgrade\ndnf --assumeyes install bubblewrap wget curl rpmdevtools rpm-build\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\n./rpm_download_source.sh\n./rpm_build.sh\n"
+      commands: "set -e\n\nmount | grep onedev\nls -ld /onedev-build/workspace\nstat -c '%u %g %a %n' /onedev-build/workspace\n\ndnf --refresh --assumeyes upgrade\ndnf --assumeyes install bubblewrap wget curl rpmdevtools rpm-build\n\nfor spec in *.spec; do\n\tsudo dnf builddep --assumeyes \"$spec\"\ndone\n\t\n./rpm_download_source.sh\n./rpm_build.sh\n"
     useTTY: true
     condition: SUCCESSFUL
     optional: false
