@@ -1,7 +1,7 @@
 Summary: Dummy package
 Name:    null
 Version: 2.0
-Release: 1
+Release: 2
 Group:   Development/Other
 License: GPL
 
